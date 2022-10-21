@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="Photo Credit1" content="The photo is retrieved on Oct 11, 2022 from 
+            https://chargerbulletin.com/wp-content/uploads/2019/02/ebookversusbook-818x900.jpg">
+        <meta name="Photo Credit2" content="The photo is retrieved on Oct 11, 2022 from 
+            https://ychef.files.bbci.co.uk/976x549/p07n19vr.jpg">
+        <meta name="keywords" content="Green learning; Paperless; Ebooks; Green computing; Environment; Tree; book; waste; paperless; 
+            calculator; green; ecosystem">
+        <title>
+            E-Books
+        </title>
+        <script>
+            var visit;
+            var coach=0;
+            var pageNum, copyNum,text;
+            function start(){
+                //localStorage.visit=-1; //this is to reset visit times
+                addVisit();
+                //document.getElementById("visitTimes").innerHTML = visit;
+                //visit = 0;//naive
+                //visit = 3;//novice
+                //visit = 8;//typical
+                //visit = 12;//casual
+                //visit = 16; //advanced
+                if (visit == 0) {
+                    //document.getElementById("usertype").innerHTML = "Naive";
+                    disableHide();
+                    //disableOverflow();
+                    coach=1;
+                    execWizard();
+                    execInputHelp();
+                    document.getElementById('wizbtn1').style.display='none';
+                    document.getElementById('settingsselect').style.display='none';
+                }
+                if ((visit > 0) && (visit < 5)) {
+                    //document.getElementById("usertype").innerHTML = "Novice";
+                    disableExpand();
+                    disableHide();
+                    disableCoach();
+                    //disableOverflow();
+                    execWizard();
+                    execInputHelp();
+                }
+                if ((visit >= 5) && (visit < 10)){
+                    //document.getElementById("usertype").innerHTML = "Typical";
+                    disableExpand();
+                    disableCoach();
+                    //disableOverflow();
+                    disableWiz();
+                    execPop();
+                    execAuto();
+                    execMeter();
+                    execNext();
+                }
+                if ((visit >= 10) && (visit < 15)) {
+                    //document.getElementById("usertype").innerHTML = "Casual";
+                    disableExpand();
+                    disableCoach();
+                    //disableOverflow();
+                    disableWiz();
+                    execInputHelp();
+                    execPop();
+                    execAuto();
+                    execMeter();
+                }
+                if (visit >= 15) {
+                    //document.getElementById("usertype").innerHTML = "Advanced";
+                    disableExpand();
+                    disableCoach();
+                    disableWiz();
+                    execPop();
+                    execMeter();
+                    execAuto();
+                    execFeature();
+                    execNext();
+                    execOverflow();
+                }
+            }
+            function disableHide(){
+                document.getElementById('hiddenBtn').style.display='none';
+                document.getElementById('introduction').style.display='block';
+            }
+            function execPop() {
+                document.getElementById('inputhelp').style.display='block';
+            }
+            function displayExpand(){
+                //document.getElementById('tree').style.display='block';
+                document.getElementById('numinput').style.display='block';
+                document.getElementById('calc').style.display='block';
+                document.getElementById('showTree').style.display='block';
+                document.getElementById('wizbtn1').style.display='block';
+            }   
+            function disableExpand(){
+                displayExpand();
+                document.getElementById('startbtn').style.display='none';
+            }
+            function disableCoach(){
+                document.getElementById('page').onkeydown='none';
+                document.getElementById('copy').onkeydown='none';
+                document.getElementById('calculator').onclick=CalcTree;
+                document.getElementById('stepone').style.display='none';
+            }
+            function step1(){
+                document.getElementById('stepone').style.display='none';
+                document.getElementById('steptwo').style.display='block';
+            }
+            function step2(){
+                document.getElementById('steptwo').style.display='none';
+                document.getElementById('stepthree').style.display='block';
+            }
+            function step3(){
+                document.getElementById('stepthree').style.display='none';
+            }
+            function execWizard(){
+                document.getElementById('wizbtn1').style.display='block';
+                document.getElementById('copy').style.display='none';
+                document.getElementById('incopy').style.display='none';
+                document.getElementById('calculator').style.display='none';
+            }
+            function wiz1(){
+                document.getElementById('wizbtn1').style.display='none';
+                document.getElementById('wizbtn2').style.display='block';
+                document.getElementById('copy').style.display='block';
+                document.getElementById('incopy').style.display='block';
+                if (coach==1) step1();
+            }
+            function wiz2(){
+                document.getElementById('calculator').style.display='block';
+                document.getElementById('wizbtn2').style.display='none';
+                if (coach==1) step2();
+            }
+            function disableWiz(){
+                document.getElementById('wizbtn1').style.display='none';
+            }
+            function execOverflow(){
+                document.getElementById('tree').style.display='block';
+            }
+            function execInputHelp(){
+                document.getElementById('page').onmouseover=hop1;
+                document.getElementById('copy').onmouseover=hop2;
+            }
+            function hop1(){
+                document.getElementById('hophelp1').style.display='block';
+            }
+            function hop2(){
+                document.getElementById('hophelp2').style.display='block';
+            }
+            function expandHide(){
+                document.getElementById('introduction').style.display='block';
+                document.getElementById('hiddenBtn').style.display='none';
+            }
+            function addVisit(){
+                if(typeof(Storage) !== "undefined"){
+                    if (localStorage.visit) {
+                        localStorage.visit ++;
+                        visit=localStorage.visit;
+                    } else {
+                        localStorage.visit = 0;
+                    }
+                }
+                else{
+                    document.getElementById("usertype").innerHTML = "Your browser does not support web storage...";
+                }
+            }
+            function saveNum(){
+                if(typeof(Storage) !== "undefined"){
+                    localStorage.hpage=parseInt(document.getElementById('page').value, 0);
+                    localStorage.hcopy=parseInt(document.getElementById('copy').value, 0);
+                }
+                else{
+                    document.getElementById("usertype").innerHTML = "Your browser does not support web storage...";
+                }
+            }
+            function execAuto(){
+                document.getElementById('default').style.display='block';
+            }
+            function autofill(){
+                document.getElementById('page').value=localStorage.getItem('hpage');
+                document.getElementById('copy').value=localStorage.getItem('hcopy');
+                document.getElementById('meter').innerHTML="You have completed 70%.";
+            }
+            function execMeter(){
+                document.getElementById('meter').style.display='block';//display the completeness meter
+                document.getElementById('meter').innerHTML="You have completed 0%."
+                document.getElementById('page').onkeyup=meter1;//change the onkeyup method of page and copy
+                document.getElementById('copy').onkeyup=meter1;
+                document.getElementById('calculator').onmousedown=meter4;
+            }
+            function meter1(){
+                if(document.getElementById("set1").checked||document.getElementById("set2").checked||document.getElementById("set3").checked){
+                    meter3();
+                }else{
+                    if((document.getElementById('copy').value==0)&&(document.getElementById('page').value==0)){
+                        document.getElementById('meter').innerHTML="You have completed 0%.";
+                    }else if((document.getElementById('copy').value==0)&&(document.getElementById('page').value!=0)){
+                        document.getElementById('meter').innerHTML="You have completed 50%.";
+                    }else if((document.getElementById('copy').value!=0)&&(document.getElementById('page').value==0)){
+                        document.getElementById('meter').innerHTML="You have completed 40%.";
+                    }else if((document.getElementById('copy').value!=0)&&(document.getElementById('page').value!=0)){
+                        document.getElementById('meter').innerHTML="You have completed 70%.";
+                    }
+                }
+            }
+            function meter3(){
+                if((document.getElementById('copy').value==0)&&(document.getElementById('page').value==0)){
+                    document.getElementById('meter').innerHTML="You have completed 20%.";
+                }else if((document.getElementById('copy').value==0)&&(document.getElementById('page').value!=0)){
+                    document.getElementById('meter').innerHTML="You have completed 70%.";
+                }else if((document.getElementById('copy').value!=0)&&(document.getElementById('page').value==0)){
+                    document.getElementById('meter').innerHTML="You have completed 60%.";
+                }else if((document.getElementById('copy').value!=0)&&(document.getElementById('page').value!=0)){
+                    document.getElementById('meter').innerHTML="You have completed 90%.";
+                }
+            }
+            function meter4(){
+                document.getElementById('meter').innerHTML="You have completed 100%.";
+            }
+            function execNext(){
+                document.getElementById('nextsteps').style.display='block';
+                document.getElementById('page').onkeyup=ns1;//change the onkeyup method of page and copy
+                document.getElementById('copy').onkeyup=ns1;
+                if(visit >=15){
+                    document.getElementById('set1').onclick=ns3;
+                    document.getElementById('set2').onclick=ns3;
+                    document.getElementById('set3').onclick=ns3;
+                }
+                document.getElementById('calculator').onmousedown=meter4;
+            }
+
+            function ns1(){
+                if(document.getElementById("set1").checked||document.getElementById("set2").checked||document.getElementById("set3").checked){
+                    ns3();
+                }else{
+                    if((document.getElementById('copy').value==0)&&(document.getElementById('page').value==0)){
+                        document.getElementById('meter').innerHTML="You have completed 0%.";
+                        document.getElementById('nextsteps').innerHTML="Your next step is to enter a number for page or copy.";
+                    }else if((document.getElementById('copy').value==0)&&(document.getElementById('page').value!=0)){
+                        document.getElementById('meter').innerHTML="You have completed 50%.";
+                        document.getElementById('nextsteps').innerHTML="Your next step is to enter a number for copy.";
+                    }else if((document.getElementById('copy').value!=0)&&(document.getElementById('page').value==0)){
+                        document.getElementById('meter').innerHTML="You have completed 40%.";
+                        document.getElementById('nextsteps').innerHTML="Your next step is to enter a number for page.";
+                    }else if((document.getElementById('copy').value!=0)&&(document.getElementById('page').value!=0)){
+                        document.getElementById('meter').innerHTML="You have completed 70%.";
+                        if(visit <15){
+                            document.getElementById('nextsteps').innerHTML="Your next step is to start.";
+                        }else{
+                            document.getElementById('nextsteps').innerHTML="Your next step is to click the Tree Type Settings.";
+                        }
+                    }
+                }
+            }
+            function ns3(){
+                if((document.getElementById('copy').value==0)&&(document.getElementById('page').value==0)){
+                    document.getElementById('meter').innerHTML="You have completed 20%.";
+                    document.getElementById('nextsteps').innerHTML="Your next step is to enter a number for page or copy.";
+                }else if((document.getElementById('copy').value==0)&&(document.getElementById('page').value!=0)){
+                    document.getElementById('meter').innerHTML="You have completed 70%.";
+                    document.getElementById('nextsteps').innerHTML="Your next step is to enter a number for copy.";
+                }else if((document.getElementById('copy').value!=0)&&(document.getElementById('page').value==0)){
+                    document.getElementById('meter').innerHTML="You have completed 60%.";
+                    document.getElementById('nextsteps').innerHTML="Your next step is to enter a number for page.";
+                }else if((document.getElementById('copy').value!=0)&&(document.getElementById('page').value!=0)){
+                    document.getElementById('meter').innerHTML="You have completed 90%.";
+                    document.getElementById('nextsteps').innerHTML="Your next step is to click the Start Calculation.";
+                }
+                
+            }
+            function execFeature(){
+                document.getElementById('small').style.display='block';
+                document.getElementById('medium').style.display='block';
+                document.getElementById('large').style.display='block';
+                document.getElementById('small').innerHTML="Try 300 for pages and 300 for copies";
+                document.getElementById('medium').innerHTML="Try 1000 for pages and 1000 for copies";
+                document.getElementById('large').innerHTML="Try 8000 for pages and 8000 for copies";
+                document.getElementById('calculator').onclick=feature;
+            }
+            function feature(){
+                CalcTree();
+                if((pageNum==300)&&(copyNum==300)){
+                    document.getElementById('small').innerHTML="";
+                }else if((pageNum==1000)&&(copyNum==1000)){
+                    document.getElementById('medium').innerHTML="";
+                }else if((pageNum==8000)&&(copyNum==8000)){
+                    document.getElementById('large').innerHTML="";
+                }
+            }
+            
+            function LinkToCMO(){
+                window.location="ClassMaterialOnline.html";
+            }
+            function LinkToNO(){
+                window.location="NewsOnline.html";
+            }
+           
+            function CalcTree(){
+                var treeNum;
+                
+                pageNum = parseInt(document.getElementById('page').value, 0);
+                copyNum = parseInt(document.getElementById('copy').value, 0);
+                text="By using the electronic verion of "
+                    +document.getElementById('copy').value+" copies of "
+                    +document.getElementById('page').value+"-pages e-books, you will save ";
+
+                s1 = document.getElementById("set1").checked;
+	            s2 = document.getElementById("set2").checked;
+	            s3 = document.getElementById("set3").checked;
+
+                if (s1) {
+                    treeNum= pageNum*copyNum/2/7000;
+                    text=text+treeNum+" Chrismas trees";
+                } 
+	            if (s2){
+                    treeNum= pageNum*copyNum/2/10000;
+                    text=text+treeNum+" maple trees";
+                } 
+	            if (s3){
+                    treeNum= pageNum*copyNum/2/13000;
+                    text=text+treeNum+" apple trees";
+                }
+                if(treeNum == null){
+                    treeNum= pageNum*copyNum/2/10000;
+                    text=text+treeNum+" trees of common size";
+                }    
+                document.getElementById('showTree').innerHTML=text;
+                saveNum();
+                if(visit>=15){
+                    document.getElementById('nextsteps').innerHTML="";
+                }
+            }
+            //this is the overflow menu
+            function myTree() {
+	            document.getElementById('settingsselect').style.display='block';
+            }
+            
+        </script>
+    </head>
+    
+    <body onload="start()">
+        <h1>
+            E-BOOKS
+        </h1>
+        <!--Test-->
+        <p id="visitTimes"></p>
+        <p id="usertype"></p>
+
+        <!--This is navigation bar: -->
+        <h2>Related Resource</h2>
+        <p>
+            <button type="button" onclick="LinkToCMO();">Class Material Online</button>
+        </p>
+        <p>
+            <button type="button" onclick="LinkToNO();">News Online</button>
+        </p>
+
+        <!--This is the breadcrumb-->
+        <p>Green Computing Topics >> Paperless >> E-Books </p>
+
+        <!--Main Content: The content including text and images is independently developed by author Yuting Wu. Anyone 
+            without the author's permission may not use or cite.-->
+        <h2>Benefits Of Using E-Books</h2>
+        <p>
+            <b>Introduction</b><br>
+            An E-book is the electronic version of a book and it does not require to be printed. 
+            E-books are more and more available partly because of the spread of world wide web for which people can 
+            share documents in a more timely way without physical constraints. Another important factor that prospects 
+            the usage of E-books is that technology makes electronic devices easier and cheaper to access. <br>
+            <br> 
+        </p>
+        <p id="benefits">
+                <b>Benfits</b>
+                <ol>
+                    <li>Save trees</li>
+                    <li>Lower book prices</li>
+                    <li>Small storage required</li>
+                    <li>Easier to share</li>
+                </ol>
+        </p>
+
+        <!--This is a calculator-->
+        <!--
+            User will input a number as the copies of e-book required, and the number of pages an e-book has.
+            On piece of a paper can only print two pages.
+            Then the calculator will follow the equation: tree = # of pages * # of copies / 2 / 10000.
+            Then it will return the number of trees in the next paragraph.
+        -->
+        <h2>E-Book Saving Calculator</h2>
+        <p><input type = "button" id = "hiddenBtn" value = "Complete Introduction" 
+                onclick="expandHide()">
+        </p>
+        <p hidden id="introduction">
+            <b>Introduction of Calculator: </b> The purpose of this calculator is to see how many trees will be saved
+            if we use electronic books instead of physical books. This calculator will take two inputs for the page number 
+            and the copies of a book. The calculator will use the following equation to find out the approximate number of
+            trees will be saved at default: <b>tree = # of pages * # of copies / 2 / 10000</b> 
+        </p>
+        <p><input type="button" id="startbtn" value = "Start" 
+            onclick="displayExpand()"/>
+        </p>
+        <p>
+            <input type = "button" id = "inputhelp" value = "Input help" 
+                onclick="alert('Please input a positive number for an ebook and a positive number for the copies you want.')" style="display:none">
+        </p>
+        <p>
+            <input type = "button" id = "default" value = "Historical Value" 
+                 onclick="autofill()" style="display:none">
+        </p>
+        <p id="meter" style="display:none"></p>
+        <p id="nextsteps" style="display:none"></p>
+        <p id="numinput" style="display:none">
+            <b id='inpage'>Page Number </b>
+            <input id="page"></input>
+            <b id="stepone">&lt ENTER A NUMBER OF PAGES FOR AN E-BOOK</b>
+            <i id="hophelp1" style="display:none">Please input any positive number</i>
+            <br>
+            <b id="incopy">Copy Number</b>
+            <input id="copy"></input>
+            <b id="steptwo" style="display:none">&lt ENTER A NUMBER OF COPIES FOR AN E-BOOK</b>
+            <i id="hophelp2" style="display:none">Please input any positive number</i>
+            <br>
+        </p>
+        <p><button tyep="button" id="wizbtn1" style="display:none" value="Next Step" onclick="wiz1()">Next Step</button></p>
+        <p><button tyep="button" id="wizbtn2" style="display:none" value="Next Step" onclick="wiz2()">Next Step</button></p>      
+        <p><input type="button" id="tree" value = "Tree Type Setting" onclick="myTree()" style="display:none"/>
+        <p id="settingsselect" style="display:none">
+            <input type=radio id="set1" name=myradio onclick="meter3()">Christmas Tree<br><!--It can make 7000 pieces of paper-->
+            <input type=radio id="set2" name=myradio onclick="meter3()">Maple Tree<br><!--It can make 10000 pieces of paper-->
+            <input type=radio id="set3" name=myradio onclick="meter3()">Apple Tree<br><!--It can make 13000 pieces of paper-->
+        </p>
+        <p id="calc" style="display:none">
+            <input type = "button" id = "calculator" value = "Start Calculation" 
+                onclick="CalcTree(); step3()"/>
+                <b id="stepthree" style="display:none">&lt PRESS THE BUTTON TO START</b>
+            <br>
+        </p>
+        <p id="showTree" style="display:none"></p>
+        <p id="small" style="display:none"></p>
+        <p id="medium" style="display:none"></p>
+        <p id="large" style="display:none"></p>
+
+        <p>
+            <img src="photo/ebookversusbook-818x900.jpg" alt="ebookversusbook">
+            <img src="photo/trees.jpg" alt="a lot of trees">
+        </p>
+
+        <!--This is the Sitemap-->
+        <h2>Sitemap</h2>
+        <h3><b>A. Paperless</b></h3>
+            <a href="NewsOnline.html"><p>1. News Online</p></a>
+            <a href="ClassMaterialOnline.html"><p>2. Class Material Online</p></a>
+            <a href="PaperlessOffice.html"><p>3. Paperless Office</p></a>
+            <a href="E-Books.html"><p>4. E-books</p></a>
+
+        <h3><b>B. Reduce</b></h3>
+            <a href="JustInTimeInventory.html"><p>5. Just In Time Inventory</p></a> 
+            <a href="OnlineMeetings.html"><p>6. Online Meetings</p></a>  
+            <a href="EGifts.html"><p>7. E-gifts</p></a> 
+
+        <h3><b>C. Reuse and Recycle</b></h3>
+            <a href="EWaste&ElectronicRecycling.html"><p>8. Ewaste and Electronic Recycling</p></a> 
+            <a href="CycleOfPurchasing.html"><p>9. Cycle of Purchasing</p></a>
+            <a href="ReusingOldComputers.html"><p>10. Reusing Old Computers</p></a> 
+
+        <h3><b>D. Energy</b></h3>
+            <a href="WastedEnergy.html"><p>11. Wasted Energy</p></a> 
+            <a href="SmartBuildings.html"><p>12. Smart Buildings</p></a> 
+            <a href="ComputerInefficiency.html"><p>13. Computer Inefficiency</p></a>
+    </body>
+</html>
